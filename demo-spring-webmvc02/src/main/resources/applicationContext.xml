@@ -1,0 +1,52 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.2.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+  <context:component-scan base-package="com.demo.spring.webmvc03">
+    <context:exclude-filter type="annotation"
+                            expression="org.springframework.stereotype.Controller"/>
+  </context:component-scan>
+
+  <context:property-placeholder location="classpath:db.properties"/>
+
+  <tx:annotation-driven proxy-target-class="true"/>
+
+  <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+
+  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+
+  <!--具名参数, 其没有无参数的构造器-->
+  <bean id="namedParameterJdbcTemplate"
+        class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+    <constructor-arg ref="dataSource"/>
+  </bean>
+
+  <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
+        destroy-method="close">
+    <property name="url"
+              value="${mysql.url:jdbc:mysql://127.0.0.1:3306}/spring?useUnicode=true&amp;characterEncoding=UTF-8&amp;"/>
+    <property name="username" value="${mysql.username:root}"/>
+    <property name="password" value="${mysql.password:123456}"/>
+  </bean>
+
+  <bean id="requestBean" class="com.demo.spring.webmvc03.bean.RequestBean" scope="request"/>
+
+  <bean id="sessionBean" class="com.demo.spring.webmvc03.bean.SessionBean" scope="session"/>
+
+  <bean id="applicationBean" class="com.demo.spring.webmvc03.bean.ApplicationBean"
+        scope="application"/>
+
+</beans>
