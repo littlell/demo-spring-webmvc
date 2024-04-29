@@ -6,7 +6,7 @@
 
   <properties>
     <jaxb.version>2.3.0</jaxb.version>
-    <java.version>11</java.version>
+    <java.version>21</java.version>
   </properties>
 
   <artifactId>demo-spring-webmvc</artifactId>
